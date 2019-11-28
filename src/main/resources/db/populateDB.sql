@@ -20,5 +20,5 @@ INSERT INTO meals (user_id,datetime, description, calories) VALUES
     (100001,'2015-05-31 13:06', 'Обед', '500'),
     (100001,'2015-05-31 20:07', 'Ужин', '510');
 
-SELECT * FROM meals WHERE user_id=100000 AND datetime >='2015-05-30' AND
-                          datetime<='2015-05-31' ORDER BY datetime DESC
+SELECT * FROM meals WHERE user_id=100000 AND datetime BETWEEN '2015-05-30 10:10' AND
+                          '2015-05-30 20:26' ORDER BY datetime DESC

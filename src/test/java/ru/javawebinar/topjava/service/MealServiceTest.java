@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -13,6 +14,7 @@ import ru.javawebinar.topjava.model.Meal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
+
 import static ru.javawebinar.topjava.MealTestData.*;
 
 @ContextConfiguration({
@@ -30,6 +32,7 @@ public class MealServiceTest {
         SLF4JBridgeHandler.install();
     }
 
+
     @Autowired
     private MealService service;
 
@@ -41,7 +44,6 @@ public class MealServiceTest {
     @Test
     public void delete() {
         service.delete(100002, 100000);
-
     }
 
     @Test
@@ -63,7 +65,9 @@ public class MealServiceTest {
     @Test
     public void create() {
         Meal meal = new Meal(null,LocalDateTime.of(2018, Month.MAY, 30, 10, 0), "Завтрак", 500);
-        Meal newmeal = service.create(meal, 100000);
-        meal.setId(newmeal.getId());
+        Meal newMeal = service.create(meal, 100000);
+        meal.setId(newMeal.getId());
+
+
     }
 }
