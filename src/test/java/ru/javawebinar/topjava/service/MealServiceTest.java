@@ -10,10 +10,10 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Meal;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
-
-import static org.junit.Assert.*;
-import static ru.javawebinar.topjava.UserTestData.assertMatch;
+import static ru.javawebinar.topjava.MealTestData.*;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -35,10 +35,13 @@ public class MealServiceTest {
 
     @Test
     public void get() {
+        Meal meal = service.get(100002, 100000);
     }
 
     @Test
     public void delete() {
+        service.delete(100002, 100000);
+
     }
 
     @Test
@@ -52,9 +55,15 @@ public class MealServiceTest {
 
     @Test
     public void update() {
+        Meal meal = new Meal(100002,LocalDateTime.of(2018, Month.MAY, 30, 10, 0), "Завтрак", 500);
+        meal.setCalories(5000);
+        service.update(meal,100000);
     }
 
     @Test
     public void create() {
+        Meal meal = new Meal(null,LocalDateTime.of(2018, Month.MAY, 30, 10, 0), "Завтрак", 500);
+        Meal newmeal = service.create(meal, 100000);
+        meal.setId(newmeal.getId());
     }
 }
