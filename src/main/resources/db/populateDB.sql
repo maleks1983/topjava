@@ -1,8 +1,10 @@
+DELETE FROM meals;
 DELETE FROM user_roles;
 DELETE FROM users;
-DELETE FROM meals;
+
 
 ALTER SEQUENCE global_seq RESTART WITH 100000;
+
 
 INSERT INTO users (name, email, password) VALUES
   ('User', 'user@yandex.ru', 'password'),
@@ -19,6 +21,3 @@ INSERT INTO meals (user_id,datetime, description, calories) VALUES
     (100001,'2015-05-31 10:59', 'Завтрак', '1000'),
     (100001,'2015-05-31 13:06', 'Обед', '500'),
     (100001,'2015-05-31 20:07', 'Ужин', '510');
-
-SELECT * FROM meals WHERE user_id=100000 AND datetime BETWEEN '2015-05-30 10:10' AND
-                          '2015-05-30 20:26' ORDER BY datetime DESC

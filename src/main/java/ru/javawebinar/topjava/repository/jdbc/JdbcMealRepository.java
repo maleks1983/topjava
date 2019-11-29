@@ -10,10 +10,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.DateTimeUtil;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Repository
@@ -75,7 +73,8 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        return jdbcTemplate.query("SELECT * FROM meals WHERE user_id=? AND datetime BETWEEN ? AND ? " +
-                        "ORDER BY datetime DESC", ROW_MAPPER,userId,startDate,endDate);
+        return jdbcTemplate.query("SELECT * FROM meals WHERE user_id=? AND datetime::date BETWEEN ? AND ? " +
+                        "AND datetime::time BETWEEN ? AND ? ORDER BY datetime DESC"
+                , ROW_MAPPER, userId, startDate.toLocalDate(), endDate.toLocalDate(), startDate.toLocalTime(), endDate.toLocalTime());
     }
 }
