@@ -1,15 +1,21 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TestRule;
+import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 
@@ -25,6 +31,9 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Autowired
     private MealService service;
 
@@ -35,8 +44,11 @@ public class MealServiceTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void deleteNotFound() throws Exception {
+    public void deleteNotFound() throws IOException {
         service.delete(1, USER_ID);
+        thrown.expect(IOException.class);
+        thrown.expectMessage("Good");
+        thrown = ExpectedException.none();
     }
 
     @Test(expected = NotFoundException.class)
@@ -60,8 +72,10 @@ public class MealServiceTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void getNotFound() throws Exception {
+    public void getNotFound() throws IOException {
         service.get(1, USER_ID);
+        thrown.expect(IOException.class);
+        thrown.expectMessage("NotFound");
     }
 
     @Test(expected = NotFoundException.class)
@@ -77,8 +91,11 @@ public class MealServiceTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void updateNotFound() throws Exception {
+    public void updateNotFound() throws IOException {
         service.update(MEAL1, ADMIN_ID);
+        thrown.expect(IOException.class);
+        thrown.expectMessage("Good");
+        thrown = ExpectedException.none();
     }
 
     @Test

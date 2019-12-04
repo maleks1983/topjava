@@ -1,42 +1,43 @@
 package ru.javawebinar.topjava.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @NamedQueries({
-        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.user=:user AND m.id=:id"),
-        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m LEFT JOIN FETCH m.dateTime ORDER BY m.dateTime"),
+        @NamedQuery (name=Meal.DELETE, query="DELETE FROM Meal m WHERE m.user.id=:userid AND m.id=:Id"),
+        @NamedQuery (name=Meal.ALL_SORTED, query="SELECT m FROM Meal m where m.user.id=:userid ORDER BY m.dateTime DESC"),
+        @NamedQuery (name=Meal.FIND_SORTED, query="SELECT m FROM Meal m where m.user.id=:userid AND m.dateTime BETWEEN :startdate AND :enddate ORDER BY m.dateTime DESC"),
+        @NamedQuery (name=Meal.GET_ONE, query="SELECT m FROM Meal m WHERE m.user.id=:userid AND m.id=:id"),
 })
 
 @Entity
-@Table (name="meals", uniqueConstraints={@UniqueConstraint (columnNames="dateTime", name="meals_unique_user_datetime_idx")})
-
+@Table (name="meals", uniqueConstraints={@UniqueConstraint (columnNames="date_time", name="meals_unique_user_datetime_idx")})
 public class Meal extends AbstractBaseEntity {
 
-    public static final String DELETE = "User.delete";
-    public static final String ALL_SORTED = "User.getAllSorted";
+    public static final String DELETE="Meal.delete";
+    public static final String ALL_SORTED="Meal.getAllSorted";
+    public static final String FIND_SORTED="Meal.FindAndSorted";
+    public static final String GET_ONE="Meal.GetMeal";
 
-    @Column(name = "dateTime", nullable = false, unique = true)
-    @NotBlank
-    @Size(max = 100)
+    @NotNull
+    @Column (name="date_time", columnDefinition="timestamp", unique=true)
     private LocalDateTime dateTime;
 
-    @Column(name = "description", nullable = false)
-    @NotBlank
-    @Size(min = 5, max = 100)
+    @NotEmpty
+    @Column (name="description")
     private String description;
 
-    @Column(name = "calories", nullable = false)
-    @NotBlank
-    @Size(min = 5, max = 100)
+    @NotNull
+    @Column (name="calories")
     private int calories;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+
+    @ManyToOne (fetch=FetchType.LAZY)
+    @JoinColumn (name="user_id", unique=true)
     private User user;
 
     public Meal() {
