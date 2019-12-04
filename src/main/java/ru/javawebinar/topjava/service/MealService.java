@@ -4,10 +4,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.DateTimeUtil;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
@@ -30,10 +28,7 @@ public class MealService {
     }
 
     public List<Meal> getBetweenDates(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
-        return repository.getBetween(
-                DateTimeUtil.createDateTime(startDate, LocalDate.MIN, LocalTime.MIN),
-                DateTimeUtil.createDateTime(endDate, LocalDate.MAX, LocalTime.MAX),
-                userId);
+        return repository.getBetweenInclusive(startDate, endDate, userId);
     }
 
     public List<Meal> getAll(int userId) {
