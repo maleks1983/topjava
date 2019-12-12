@@ -7,6 +7,7 @@ public class ActiveDbProfileResolver implements ActiveProfilesResolver {
 
     @Override
     public String[] resolve(Class<?> aClass) {
-        return new String[]{Profiles.getActiveDbProfile()};
+        final String activeProfile=System.getProperty("spring.profiles.active");
+        return new String[]{activeProfile == null ? "integration" : activeProfile};
     }
 }
