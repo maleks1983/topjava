@@ -4,6 +4,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -41,5 +42,9 @@ public class MealService {
 
     public Meal create(Meal meal, int userId) {
         return repository.save(meal, userId);
+    }
+
+    public Meal getWithUser(int id, int userId) throws NotFoundException {
+        return checkNotFoundWithId(repository.getWithUser(id, userId), id);
     }
 }
