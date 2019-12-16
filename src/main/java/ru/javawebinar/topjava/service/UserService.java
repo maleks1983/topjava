@@ -50,7 +50,7 @@ public class UserService {
         checkNotFoundWithId(repository.save(user), user.getId());
     }
 
-    public User getWithMeals(int id) throws NotFoundException {
+    public User getWithMeals(int id) {
         return checkNotFoundWithId(repository.getWithMeals(id), id);
     }
 }
