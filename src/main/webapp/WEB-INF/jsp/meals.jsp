@@ -3,16 +3,19 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>
 <html>
+
+<jsp:include page="fragments/headTag.jsp"/>
+<body>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 <head>
     <title>Meals</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <section>
-    <h3><a href="index.jsp">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
-    <form method="get" action="meals/filter">
+    <form method="post" action="meals">
         <input type="hidden" name="action" value="filter">
         <dl>
             <dt>From Date:</dt>
@@ -80,5 +83,6 @@
         </c:forEach>
     </table>
 </section>
+</body>
 </body>
 </html>

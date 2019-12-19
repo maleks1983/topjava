@@ -21,26 +21,28 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 @Controller
-public class JspMealController  extends AbstractMealRestController{
+@RequestMapping("/meals")
+public class JspMealController extends AbstractMealRestController {
 
     public JspMealController(MealService service) {
         super(service);
     }
 
 
-    @GetMapping("/meals")
+    @GetMapping()
     public String Meals(Model model) {
-        model.addAttribute("meals",getAll());
+        model.addAttribute("meals", getAll());
         return "meals";
     }
 
-    @PostMapping("meals/update:{id}")
+
+    @PostMapping("/update:{id}")
     public String Update(@PathVariable int id, Model model) {
         model.addAttribute("meals", get(id));
         return "mealForm";
     }
 
-    @PostMapping("meals/save")
+    @PostMapping("/save")
     public String Save(@ModelAttribute("meal") Meal meal) {
         if (meal.isNew()) {
             create(meal);
@@ -50,7 +52,7 @@ public class JspMealController  extends AbstractMealRestController{
         return "redirect:/meals";
     }
 
-    @PostMapping("meals/create")
+    @PostMapping("/create")
     public String Create(Model model) {
         Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
         model.addAttribute("meals", meal);
@@ -58,18 +60,22 @@ public class JspMealController  extends AbstractMealRestController{
     }
 
 
-    @GetMapping("meals/delete:{id}")
+    @GetMapping("/delete:{id}")
     public String Delete(@PathVariable int id) {
         delete(id);
         return "redirect:/meals";
     }
 
-    @GetMapping("meals/filter")
-    public String filter(@ModelAttribute("startDate") String sd,
-                         @ModelAttribute("endDate") String ed,
-                         @ModelAttribute("startTime") String st,
-                         @ModelAttribute("endTime") String et, Model model) {
-        model.addAttribute(getBetween(LocalDate.parse(sd),LocalTime.parse(st),LocalDate.parse(ed),LocalTime.parse(et)));
+    @PostMapping()
+    public String filter(@ModelAttribute("startDate") String startDate,
+                         @ModelAttribute("endDate") String endDate,
+                         @ModelAttribute("startTime") String startTime,
+                         @ModelAttribute("endTime") String endTime, Model model) {
+        LocalDate sd = startDate.isEmpty() ? LocalDate.of(1900, 1, 1):LocalDate.parse(startDate);
+        LocalTime st = startTime.isEmpty()?LocalTime.of(0,0):LocalTime.parse(startTime);
+        LocalDate ed = endDate.isEmpty()?LocalDate.now():LocalDate.parse(endDate);
+        LocalTime et = endTime.isEmpty()?LocalTime.of(23,59):LocalTime.parse(endTime);
+        model.addAttribute("meals", getBetween(sd, st, ed, et));
         return "meals";
     }
 
