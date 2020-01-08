@@ -77,6 +77,7 @@ public abstract class AbstractUserServiceTestJdbc extends AbstractServiceTest {
         assertMatch(service.get(USER_ID), updated);
     }
 
+
     @Test
     public void getAll() throws Exception {
         List<User> all = service.getAll();

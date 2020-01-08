@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
@@ -36,7 +37,7 @@ public class JspMealController extends AbstractMealRestController {
     }
 
 
-    @PostMapping("/update:{id}")
+    @PostMapping("/update/{id}")
     public String Update(@PathVariable int id, Model model) {
         model.addAttribute("meals", get(id));
         return "mealForm";
@@ -60,7 +61,7 @@ public class JspMealController extends AbstractMealRestController {
     }
 
 
-    @GetMapping("/delete:{id}")
+    @GetMapping("/delete/{id}")
     public String Delete(@PathVariable int id) {
         delete(id);
         return "redirect:/meals";
@@ -71,12 +72,11 @@ public class JspMealController extends AbstractMealRestController {
                          @ModelAttribute("endDate") String endDate,
                          @ModelAttribute("startTime") String startTime,
                          @ModelAttribute("endTime") String endTime, Model model) {
-        LocalDate sd = startDate.isEmpty() ? LocalDate.of(1900, 1, 1):LocalDate.parse(startDate);
-        LocalTime st = startTime.isEmpty()?LocalTime.of(0,0):LocalTime.parse(startTime);
-        LocalDate ed = endDate.isEmpty()?LocalDate.now():LocalDate.parse(endDate);
-        LocalTime et = endTime.isEmpty()?LocalTime.of(23,59):LocalTime.parse(endTime);
+        LocalDate sd = DateTimeUtil.parseLocalDate(startDate);
+        LocalTime st = DateTimeUtil.parseLocalTime(startTime);
+        LocalDate ed = DateTimeUtil.parseLocalDate(endDate);
+        LocalTime et = DateTimeUtil.parseLocalTime(endTime);
         model.addAttribute("meals", getBetween(sd, st, ed, et));
         return "meals";
     }
-
 }

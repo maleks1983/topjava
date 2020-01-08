@@ -7,11 +7,6 @@
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
-<head>
-    <title>Meals</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
 <section>
     <hr/>
     <h2>Meals</h2>
@@ -66,14 +61,13 @@
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
                 <td>
-                    <form method="post" action="meals/update:${meal.id}">
+                    <form method="post" action="meals/update/${meal.id}">
                         <button type="submit">
                             Update
                         </button>
-                    </form>
-                </td>
+                    </form></td>
                 <td>
-                    <form method="get" action="meals/delete:${meal.id}">
+                    <form method="get" action="meals/delete/${meal.id}">
                         <button type="submit">
                             Delete
                         </button>
@@ -83,6 +77,5 @@
         </c:forEach>
     </table>
 </section>
-</body>
 </body>
 </html>

@@ -1,14 +1,22 @@
 package ru.javawebinar.topjava.repository.jpa;
 
 import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 @Transactional(readOnly = true)
@@ -68,5 +76,25 @@ public class JpaUserRepository implements UserRepository {
     @Override
     public List<User> getAll() {
         return em.createNamedQuery(User.ALL_SORTED, User.class).getResultList();
+    }
+
+
+    private void IncRoles(User user) {
+        Set<Role> roleSet = user.getRoles();
+        Iterator<Role> iterator= roleSet.iterator();
+        JdbcOperations jdbcTemplate = null;
+        jdbcTemplate.batchUpdate("INCERT INFO user_role (user_id,role) VALUE ? ?", new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setInt(1, user.getId());
+                ps.setString(2, iterator.next().name());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return roleSet.size();
+            }
+        });
+
     }
 }
