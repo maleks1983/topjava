@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
-import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
@@ -29,8 +28,8 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void create() throws Exception {
-        User newUser = UserTestData.getNew();
-        User created = service.create(newUser);
+        User newUser = getNew();
+        User created = service.create(new User(newUser));
         newUser.setId(created.getId());
         assertMatch(created, newUser);
         assertMatch(service.getAll(), ADMIN, newUser, USER);
@@ -71,7 +70,8 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void update() throws Exception {
-        User updated = UserTestData.getUpdated();
+        User updated = getUpdated();
+        service.update(new User(updated));
         assertMatch(service.get(USER_ID), updated);
     }
 
